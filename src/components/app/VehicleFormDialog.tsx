@@ -138,15 +138,15 @@ export function VehicleFormDialog({
 
   const set = <K extends keyof typeof f>(k: K, v: (typeof f)[K]) => setF((p) => ({ ...p, [k]: v }));
 
-  async function submit() {
-    if (!owner.id) return toast.error("Choose the vehicle owner.");
-    if (!f.make.trim() || !f.model.trim()) return toast.error("Enter the make and model.");
+  async function submit(): Promise<void> {
+    if (!owner.id) return void toast.error("Choose the vehicle owner.");
+    if (!f.make.trim() || !f.model.trim()) return void toast.error("Enter the make and model.");
     const year = f.year ? Number(f.year) : null;
     if (year !== null && (!Number.isInteger(year) || year < 1950 || year > new Date().getFullYear() + 1))
-      return toast.error("Enter a valid model year.");
+      return void toast.error("Enter a valid model year.");
     const odo = f.odometer_km ? Number(f.odometer_km.replace(/[^\d]/g, "")) : null;
     const vin = f.vin.replace(/\s/g, "").toUpperCase();
-    if (vin && vin.length !== 17) return toast.error("VIN must be 17 characters.");
+    if (vin && vin.length !== 17) return void toast.error("VIN must be 17 characters.");
 
     const payload = {
       customer_id: owner.id,
@@ -172,7 +172,7 @@ export function VehicleFormDialog({
           .select("id")
           .single();
     setBusy(false);
-    if (res.error) return toast.error(friendlyError(res.error));
+    if (res.error) return void toast.error(friendlyError(res.error));
     toast.success(vehicle ? "Vehicle updated." : "Vehicle added.");
     qc.invalidateQueries({ queryKey: ["vehicles"] });
     qc.invalidateQueries({ queryKey: ["vehicle", res.data.id] });

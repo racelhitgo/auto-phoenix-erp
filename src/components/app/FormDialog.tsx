@@ -17,8 +17,8 @@ export function FormDialog({
   open: boolean;
   onOpenChange: (o: boolean) => void;
   title: string;
-  description?: string;
-  onSubmit: (e: FormEvent) => void;
+  description?: string | undefined;
+  onSubmit: (e: FormEvent) => unknown;
   submitLabel?: string;
   busy?: boolean;
   children: ReactNode;
