@@ -225,3 +225,18 @@
 @utility animate-rise {
   animation: rise-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+
+/* Google sign-in button — colours fixed by Google's branding rules (light theme). */
+@utility btn-google {
+  background-color: oklch(1 0 0);
+  border: 1px solid oklch(0.56 0.003 145);
+  color: oklch(0.235 0 0);
+  font-family: "Google Sans", var(--font-sans);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  padding: 0 12px;
+  &:hover {
+    background-color: oklch(0.975 0 0);
+  }
+}
