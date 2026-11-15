@@ -1,0 +1,15 @@
+{
+  "name": "Auto Phoenix",
+  "short_name": "Auto Phoenix",
+  "description": "Auto Phoenix garage management for branches, customers and vehicles.",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#fdfcfb",
+  "theme_color": "#1c1a18",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
