@@ -42,7 +42,7 @@ export function BranchScopeProvider({ children, isAdmin }: { children: ReactNode
       branches,
       activeBranches: branches.filter((b) => b.is_active),
       current,
-      label: current ? current.name : isAdmin ? "All branches" : branches.length === 1 ? branches[0].name : "My branches",
+      label: current ? current.name : isAdmin ? "All branches" : branches.length === 1 ? (branches[0]?.name ?? "My branches") : "My branches",
     };
   }, [scope, branches, isAdmin]);
 

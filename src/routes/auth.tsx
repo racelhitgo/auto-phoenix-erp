@@ -61,18 +61,18 @@ function AuthPage() {
     return () => data.subscription.unsubscribe();
   }, [navigate]);
 
-  async function signIn(e: FormEvent) {
+  async function signIn(e: FormEvent): Promise<void> {
     e.preventDefault();
     setBusy(true);
     const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
     setBusy(false);
-    if (error) return toast.error(friendlyError(error));
+    if (error) return void toast.error(friendlyError(error));
     navigate({ to: "/dashboard", replace: true });
   }
 
-  async function setupAdmin(e: FormEvent) {
+  async function setupAdmin(e: FormEvent): Promise<void> {
     e.preventDefault();
-    if (password.length < 8) return toast.error("Use at least 8 characters for the password.");
+    if (password.length < 8) return void toast.error("Use at least 8 characters for the password.");
     setBusy(true);
     const { data, error } = await supabase.auth.signUp({
       email: email.trim(),
@@ -80,32 +80,32 @@ function AuthPage() {
       options: { emailRedirectTo: `${window.location.origin}/auth`, data: { full_name: fullName.trim() } },
     });
     setBusy(false);
-    if (error) return toast.error(friendlyError(error));
-    if (data.session) return navigate({ to: "/dashboard", replace: true });
+    if (error) return void toast.error(friendlyError(error));
+    if (data.session) return void navigate({ to: "/dashboard", replace: true });
     setSentMessage(`We sent a confirmation link to ${email.trim()}. Open it to activate your Admin account.`);
     setMode("check-email");
   }
 
-  async function forgot(e: FormEvent) {
+  async function forgot(e: FormEvent): Promise<void> {
     e.preventDefault();
     setBusy(true);
     const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
       redirectTo: `${window.location.origin}/reset-password`,
     });
     setBusy(false);
-    if (error) return toast.error(friendlyError(error));
+    if (error) return void toast.error(friendlyError(error));
     setSentMessage(`If ${email.trim()} has an Auto Phoenix account, a password reset link is on its way.`);
     setMode("check-email");
   }
 
-  async function google() {
+  async function google(): Promise<void> {
     setBusy(true);
     const result = await lovable.auth.signInWithOAuth("google", {
       redirect_uri: `${window.location.origin}/auth`,
     });
     if (result.error) {
       setBusy(false);
-      return toast.error(friendlyError(result.error));
+      return void toast.error(friendlyError(result.error));
     }
     if (result.redirected) return;
     navigate({ to: "/dashboard", replace: true });

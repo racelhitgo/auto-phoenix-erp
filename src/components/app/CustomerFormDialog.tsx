@@ -67,7 +67,7 @@ export function CustomerFormDialog({
     } else {
       setF((p) => ({
         ...p,
-        branch_id: current?.is_active ? current.id : activeBranches.length === 1 ? activeBranches[0].id : "",
+        branch_id: current?.is_active ? current.id : (activeBranches.length === 1 ? (activeBranches[0]?.id ?? "") : ""),
         customer_type: "individual",
         name: "",
         contact_person: "",
@@ -86,12 +86,12 @@ export function CustomerFormDialog({
   const set = <K extends keyof typeof f>(k: K, v: (typeof f)[K]) => setF((p) => ({ ...p, [k]: v }));
   const isCompany = f.customer_type === "company";
 
-  async function submit() {
-    if (!f.branch_id) return toast.error("Choose a branch.");
-    if (!f.name.trim()) return toast.error(isCompany ? "Enter the company name." : "Enter the customer's name.");
-    if (!f.phone.trim()) return toast.error("Enter a phone number.");
+  async function submit(): Promise<void> {
+    if (!f.branch_id) return void toast.error("Choose a branch.");
+    if (!f.name.trim()) return void toast.error(isCompany ? "Enter the company name." : "Enter the customer's name.");
+    if (!f.phone.trim()) return void toast.error("Enter a phone number.");
     const trnDigits = f.trn.replace(/\D/g, "");
-    if (trnDigits && trnDigits.length !== 15) return toast.error("TRN must be exactly 15 digits.");
+    if (trnDigits && trnDigits.length !== 15) return void toast.error("TRN must be exactly 15 digits.");
 
     const payload = {
       branch_id: f.branch_id,
@@ -113,7 +113,7 @@ export function CustomerFormDialog({
       ? await supabase.from("customers").update(payload).eq("id", customer.id).select("id").single()
       : await supabase.from("customers").insert(payload).select("id").single();
     setBusy(false);
-    if (res.error) return toast.error(friendlyError(res.error));
+    if (res.error) return void toast.error(friendlyError(res.error));
     toast.success(customer ? "Customer updated." : "Customer added.");
     qc.invalidateQueries({ queryKey: ["customers"] });
     qc.invalidateQueries({ queryKey: ["customer", res.data.id] });

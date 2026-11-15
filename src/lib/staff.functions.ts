@@ -46,7 +46,7 @@ export const createStaffAccount = createServerFn({ method: "POST" })
       _branch_ids: data.branchIds,
       _is_active: true,
       _full_name: data.fullName,
-      _phone: data.phone || undefined,
+      ...(data.phone ? { _phone: data.phone } : {}),
     });
     if (accessError) {
       await supabaseAdmin.auth.admin.deleteUser(created.user.id);
